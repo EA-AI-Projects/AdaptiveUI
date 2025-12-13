@@ -1,125 +1,170 @@
-# AdaptiveUI – Product Requirements Document (PRD)
+# AdaptiveUI
 
-## Product Name (Working Title)
-**AdaptiveUI** – LLM‑Driven Dynamic UI Rendering Engine
+**AdaptiveUI** is an experimental UI infrastructure project that explores a new paradigm:
 
----
+> **Stateful, intent-driven user interfaces compiled by an LLM and rendered natively on any device.**
 
-## 1. Problem Statement
+Instead of hard‑coding pages, flows, and navigation, AdaptiveUI introduces a **Structured UI Intent Protocol (SUIP)** that allows Large Language Models to describe *what the user should see and do next*, while platform-specific rendering engines decide *how* that experience is presented.
 
-Today’s UI development for web applications is:
-- **Expensive**: Requires designers, frontend engineers, UX researchers, and repeated iterations.
-- **Rigid**: Traditional UIs assume predefined user journeys that often don’t match real user intent.
-- **Fragmented**: Separate flows for support, billing, product discovery, onboarding, etc.
-
-Business owners and users increasingly prefer **intent‑based experiences** ("I want to pay my bill", "I need help with my toaster") rather than navigating complex menus and pages.
-
-**Opportunity**: Replace large portions of static, pre‑designed UI with an **LLM‑driven rendering engine** that dynamically generates and adapts the UI in real time based on user intent and conversation context.
+This project is inspired by the success of **Model Context Protocol (MCP)** for tool invocation and applies the same idea to **UI and UX**.
 
 ---
 
-## 2. Vision
+## Core Idea
 
-Create a **UI rendering engine powered by an LLM** that:
-- Starts with a minimal, universal entry point (chat + lightweight shell)
-- Dynamically renders UI components and layouts based on user intent
-- Continuously adapts the UI as the conversation evolves
-- Dramatically reduces UI development and maintenance costs
-- Improves user experience by meeting users where they are
+Traditional UI development couples:
+- User intent
+- Visual layout
+- Interaction logic
+- Platform-specific implementation
 
-The UI becomes **fluid, contextual, and intent‑first**.
+AdaptiveUI **decouples** these concerns:
 
----
+```
+LLM (Intent & Planning)
+        ↓
+Structured UI Intent Protocol (SUIP)
+        ↓
+Rendering Engine (Web / iOS / Android / Desktop / Voice)
+        ↓
+Native UI
+```
 
-## 3. Goals & Success Metrics
-
-### Primary Goals
-1. Reduce frontend development cost and complexity
-2. Improve task completion rates for end users
-3. Enable rapid UI iteration without redeploying frontend code
-4. Provide a consistent conversational + visual experience
-
-### Success Metrics
-- Task completion rate
-- Time to resolution
-- Reduction in UI code vs traditional approaches
-- Customer satisfaction (CSAT)
-- Frontend deployment frequency
+As long as a platform has a compliant rendering engine, **the same SUIP document can drive the experience everywhere**.
 
 ---
 
-## 4. Target Users
+## Key Concepts
 
-### End Users
-- Customers seeking help, information, or actions
+### 1. Structured UI Intent Protocol (SUIP)
 
-### Business Users
-- SMB owners
-- Product managers
-- Support teams
+SUIP is a **device-agnostic, schema-validated protocol** that allows an LLM to express:
+- Layout intent (stack, grid, modal, etc.)
+- UI components (text, forms, lists, buttons)
+- User interactions (actions, navigation)
+- Data bindings and validation
+- Accessibility semantics
 
-### Developers
-- Prefer schema‑driven, declarative UI
-- Want minimal frontend business logic
-
----
-
-## 5. Core User Experience
-
-### Initial State
-- Minimal page shell
-- Persistent chatbox
-- Suggested prompts
-
-### Dynamic Flow
-1. User expresses intent via chat
-2. Rendering engine sends context to LLM
-3. LLM returns structured UI intent
-4. UI transforms while chat remains persistent
+📄 See: [`docs/Structured_UI_Intent_Protocol_SUIP.md`](docs/Structured_UI_Intent_Protocol_SUIP.md)
 
 ---
 
-## 6. Functional Requirements
+### 2. Rendering Engines
 
-### Rendering Engine
-- Renders structured UI intent
-- Supports layouts, components, actions
-- No full page reloads
+Rendering engines are **thin runtimes** that:
+- Validate SUIP documents
+- Map protocol components to native UI widgets
+- Enforce design systems and accessibility
+- Execute actions through approved adapters
 
-### LLM Orchestration
-- Consumes conversation + state
-- Produces structured UI intent
-
-### State Management
-- Tracks user goal, progress, and render history
+Each platform implements its own renderer while sharing the same protocol.
 
 ---
 
-## 7. Non‑Functional Requirements
+### 3. LLM Orchestration Layer
 
-- Performance: low render latency
-- Security: strict sandboxing
-- Accessibility: WCAG‑compliant
+The LLM does **UI planning**, not rendering.
 
----
+It receives:
+- Conversation history
+- Session state
+- Allowed component/action manifest
 
-## 8. Technical Architecture
+It produces:
+- Deterministic, schema-valid SUIP documents
 
-- Frontend rendering engine
-- Backend LLM orchestrator
-- Structured UI intent schema (see SUIP)
-
----
-
-## 9. Guardrails
-
-- No raw HTML/JS injection
-- Strict schema validation
-- Allow‑listed components and actions only
+Guardrails ensure safety, consistency, and cost control.
 
 ---
 
-## 10. Summary
+## Why AdaptiveUI?
 
-AdaptiveUI introduces an **intent‑driven, LLM‑compiled UI runtime**, shifting UI development from page construction to protocol‑driven experience rendering.
+### Problems with Traditional UI
+- High development and maintenance cost
+- Rigid, pre-defined user flows
+- Slow iteration cycles
+- Poor alignment with real user intent
+
+### Benefits of AdaptiveUI
+- Intent-first UX
+- Fewer hard-coded pages
+- Faster iteration (no redeploys for UX changes)
+- Portable UI across platforms
+- Natural fit for conversational experiences
+
+---
+
+## Repository Structure (Planned)
+
+```
+adaptive-ui/
+├── README.md
+├── docs/
+│   ├── AdaptiveUI_PRD.md
+│   └── Structured_UI_Intent_Protocol_SUIP.md
+├── suip/
+│   ├── schema/
+│   │   └── suip.schema.json
+│   └── examples/
+│       └── billing_flow.json
+└── rendering-engines/
+    └── web/
+```
+
+---
+
+## Status
+
+🚧 **Early design / exploration phase**
+
+Current focus:
+- Formalizing the SUIP protocol
+- Defining schema + validation rules
+- Establishing rendering constraints and guardrails
+
+---
+
+## Non-Goals (for now)
+
+- Replacing all traditional UI frameworks
+- Arbitrary HTML or JavaScript generation
+- Pixel-perfect cross-platform uniformity
+
+AdaptiveUI prioritizes **intent fidelity over visual sameness**.
+
+---
+
+## Who This Is For
+
+- AI / LLM infrastructure engineers
+- Frontend and platform engineers
+- Product teams exploring intent-based UX
+- Developers interested in protocol-driven UI
+
+---
+
+## License
+
+TBD (likely Apache 2.0 or MIT)
+
+---
+
+## Vision
+
+AdaptiveUI aims to become:
+
+> **A universal protocol and runtime for conversationally compiled user interfaces.**
+
+If MCP standardized how LLMs *use tools*, AdaptiveUI explores how LLMs can *author experiences*.
+
+---
+
+## Next Steps
+
+- Define SUIP v0.1 JSON Schema
+- Build a reference web rendering engine
+- Create a system prompt for SUIP generation
+- Publish example flows (support, billing, onboarding)
+
+Contributions and discussion welcome once the protocol stabilizes.
 
