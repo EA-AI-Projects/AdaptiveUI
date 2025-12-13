@@ -1,0 +1,95 @@
+{
+  "suipVersion": "0.1",
+  "sceneId": "catalog_latest",
+  "title": "Latest Products",
+  "layout": {
+    "type": "stack",
+    "children": [
+      {
+        "type": "text",
+        "variant": "h2",
+        "content": "Latest products"
+      },
+      {
+        "type": "notice",
+        "tone": "info",
+        "message": "Here are the newest items. Ask in chat to compare or filter."
+      },
+      {
+        "type": "table",
+        "columns": [
+          {
+            "key": "name",
+            "label": "Product"
+          },
+          {
+            "key": "category",
+            "label": "Category"
+          },
+          {
+            "key": "price",
+            "label": "Price"
+          }
+        ],
+        "rows": [
+          {
+            "name": "AuraBreathe 400H",
+            "category": "Air Purifier",
+            "price": "$399"
+          },
+          {
+            "name": "AuraBreathe AirLink Pro",
+            "category": "Sensor Hub",
+            "price": "$129"
+          },
+          {
+            "name": "AuraBreathe ArtFrame Wall",
+            "category": "Air Purifier",
+            "price": "$299"
+          }
+        ]
+      },
+      {
+        "type": "stack",
+        "direction": "horizontal",
+        "children": [
+          {
+            "type": "button",
+            "label": "Refresh",
+            "tone": "secondary",
+            "action": {
+              "actionId": "catalog.listLatestProducts",
+              "params": {
+                "limit": 10
+              },
+              "onSuccess": {
+                "type": "toast",
+                "message": "Updated."
+              }
+            }
+          },
+          {
+            "type": "button",
+            "label": "Back",
+            "tone": "secondary",
+            "action": {
+              "actionId": "ui.back",
+              "onSuccess": {
+                "type": "navigate",
+                "targetSceneId": "home_shell"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "chat": {
+    "persistent": true,
+    "suggestedPrompts": [
+      "Compare the first two",
+      "Show only air purifiers",
+      "Do you have discounts?"
+    ]
+  }
+}

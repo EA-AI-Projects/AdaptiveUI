@@ -1,0 +1,259 @@
+{
+  "manifestVersion": "0.1",
+  "appId": "acme_portal",
+  "suipVersion": "0.1",
+  "displayName": "Acme Customer Portal",
+  "description": "Example manifest for support, billing, and product discovery.",
+  "policy": {
+    "disallowRawHtml": true,
+    "disallowRawJs": true,
+    "maxTreeNodes": 500,
+    "maxSceneBytes": 60000,
+    "piiHandling": "minimize"
+  },
+  "designSystem": {
+    "tokenSet": "acme_tokens_v1",
+    "allowedVariants": [
+      "h1",
+      "h2",
+      "h3",
+      "body",
+      "caption",
+      "primary",
+      "secondary",
+      "danger",
+      "info",
+      "success",
+      "warning",
+      "neutral"
+    ]
+  },
+  "components": {
+    "stack": {
+      "enabled": true
+    },
+    "grid": {
+      "enabled": true
+    },
+    "split": {
+      "enabled": true
+    },
+    "tabs": {
+      "enabled": true,
+      "maxInstancesPerScene": 2
+    },
+    "modal": {
+      "enabled": true,
+      "maxInstancesPerScene": 2
+    },
+    "drawer": {
+      "enabled": true,
+      "maxInstancesPerScene": 1
+    },
+    "text": {
+      "enabled": true,
+      "props": {
+        "content": {
+          "maxLength": 8000
+        }
+      }
+    },
+    "image": {
+      "enabled": true
+    },
+    "card": {
+      "enabled": true
+    },
+    "list": {
+      "enabled": true
+    },
+    "table": {
+      "enabled": true,
+      "maxInstancesPerScene": 3
+    },
+    "form": {
+      "enabled": true,
+      "maxInstancesPerScene": 2
+    },
+    "input": {
+      "enabled": true
+    },
+    "button": {
+      "enabled": true
+    },
+    "notice": {
+      "enabled": true
+    }
+  },
+  "actions": {
+    "catalog.listLatestProducts": {
+      "enabled": true,
+      "description": "Fetch latest product catalog entries.",
+      "rateLimitPerMinute": 60,
+      "paramsSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 10
+          }
+        }
+      }
+    },
+    "support.searchKB": {
+      "enabled": true,
+      "description": "Search knowledge base articles by query.",
+      "rateLimitPerMinute": 120,
+      "paramsSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "query"
+        ],
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "topK": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 5
+          }
+        }
+      }
+    },
+    "support.createCase": {
+      "enabled": true,
+      "description": "Create a support case.",
+      "rateLimitPerMinute": 30,
+      "paramsSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "subject",
+          "description"
+        ],
+        "properties": {
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "default": "medium"
+          }
+        }
+      }
+    },
+    "billing.previewPayment": {
+      "enabled": true,
+      "description": "Validate invoice and amount before confirm.",
+      "rateLimitPerMinute": 60,
+      "paramsSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "invoiceNumber",
+          "amount"
+        ],
+        "properties": {
+          "invoiceNumber": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 0.01
+          }
+        }
+      }
+    },
+    "billing.submitPayment": {
+      "enabled": true,
+      "description": "Submit a payment transaction.",
+      "rateLimitPerMinute": 30,
+      "paramsSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "invoiceNumber",
+          "amount",
+          "paymentMethodId"
+        ],
+        "properties": {
+          "invoiceNumber": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 0.01
+          },
+          "paymentMethodId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          }
+        }
+      }
+    },
+    "ui.back": {
+      "enabled": true,
+      "description": "Navigate back (renderer-controlled).",
+      "rateLimitPerMinute": 600,
+      "paramsSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "ui.goHome": {
+      "enabled": true,
+      "description": "Navigate to home (renderer-controlled).",
+      "rateLimitPerMinute": 600,
+      "paramsSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "support.openArticle": {
+      "enabled": true,
+      "description": "Open a KB article by id.",
+      "rateLimitPerMinute": 600,
+      "paramsSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "articleId"
+        ],
+        "properties": {
+          "articleId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        }
+      }
+    }
+  }
+}

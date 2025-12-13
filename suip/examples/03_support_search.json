@@ -1,0 +1,93 @@
+{
+  "suipVersion": "0.1",
+  "sceneId": "support_results",
+  "title": "Help Results",
+  "layout": {
+    "type": "stack",
+    "children": [
+      {
+        "type": "text",
+        "variant": "h2",
+        "content": "Help articles"
+      },
+      {
+        "type": "notice",
+        "tone": "info",
+        "message": "Based on your chat, here are suggested troubleshooting guides."
+      },
+      {
+        "type": "list",
+        "ordered": false,
+        "items": [
+          {
+            "type": "card",
+            "header": "Toaster won\u2019t turn on",
+            "content": {
+              "type": "text",
+              "content": "Check power, outlet, and reset steps."
+            },
+            "footer": {
+              "type": "button",
+              "label": "Open",
+              "action": {
+                "actionId": "support.openArticle",
+                "params": {
+                  "articleId": "kb_toaster_power"
+                },
+                "onSuccess": {
+                  "type": "toast",
+                  "message": "Opening article\u2026"
+                }
+              }
+            }
+          },
+          {
+            "type": "card",
+            "header": "Burning smell during use",
+            "content": {
+              "type": "text",
+              "content": "Crumb tray cleaning and first-use guidance."
+            },
+            "footer": {
+              "type": "button",
+              "label": "Open",
+              "action": {
+                "actionId": "support.openArticle",
+                "params": {
+                  "articleId": "kb_toaster_smell"
+                },
+                "onSuccess": {
+                  "type": "toast",
+                  "message": "Opening article\u2026"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "button",
+        "label": "Create a case",
+        "action": {
+          "actionId": "support.createCase",
+          "params": {
+            "subject": "Need help troubleshooting",
+            "description": "User requested escalation from help results."
+          },
+          "onSuccess": {
+            "type": "toast",
+            "message": "Case created."
+          }
+        }
+      }
+    ]
+  },
+  "chat": {
+    "persistent": true,
+    "suggestedPrompts": [
+      "None of these helped",
+      "Show steps for the first article",
+      "Create a case"
+    ]
+  }
+}

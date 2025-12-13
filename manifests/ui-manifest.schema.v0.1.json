@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/suip/v0.1/ui-manifest.schema.json",
+  "title": "AdaptiveUI UI Manifest v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifestVersion",
+    "appId",
+    "suipVersion",
+    "components",
+    "actions"
+  ],
+  "properties": {
+    "manifestVersion": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "appId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-zA-Z0-9_\\-\\.]+$"
+    },
+    "suipVersion": {
+      "type": "string",
+      "const": "0.1"
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 140
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "disallowRawHtml": {
+          "type": "boolean",
+          "const": true
+        },
+        "disallowRawJs": {
+          "type": "boolean",
+          "const": true
+        },
+        "maxTreeNodes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2000,
+          "default": 500
+        },
+        "maxSceneBytes": {
+          "type": "integer",
+          "minimum": 256,
+          "maximum": 500000,
+          "default": 60000
+        },
+        "piiHandling": {
+          "type": "string",
+          "enum": [
+            "none",
+            "minimize",
+            "redact",
+            "strict"
+          ]
+        }
+      }
+    },
+    "designSystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tokenSet": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "allowedVariants": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "uniqueItems": true,
+          "maxItems": 200
+        }
+      }
+    },
+    "components": {
+      "type": "object",
+      "description": "Allowlist of component types and constraints for each type.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "enabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "maxInstancesPerScene": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2000
+          },
+          "props": {
+            "type": "object",
+            "description": "Optional constraints per prop. Interpretation is renderer/orchestrator-specific.",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "maxLength": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 20000
+                },
+                "enum": {
+                  "type": "array",
+                  "items": {
+                    "type": [
+                      "string",
+                      "number",
+                      "boolean"
+                    ]
+                  },
+                  "maxItems": 2000
+                },
+                "pattern": {
+                  "type": "string",
+                  "maxLength": 500
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "actions": {
+      "type": "object",
+      "description": "Allowlist of action IDs and their JSON schemas for params.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "enabled",
+          "paramsSchema"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "paramsSchema": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "type": "object"
+          },
+          "rateLimitPerMinute": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000
+          }
+        }
+      }
+    }
+  }
+}

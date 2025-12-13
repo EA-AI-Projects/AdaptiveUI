@@ -1,0 +1,107 @@
+{
+  "suipVersion": "0.1",
+  "sceneId": "billing_pay_invoice",
+  "title": "Pay your bill",
+  "layout": {
+    "type": "stack",
+    "children": [
+      {
+        "type": "text",
+        "variant": "h2",
+        "content": "Pay your invoice"
+      },
+      {
+        "type": "form",
+        "formId": "payForm",
+        "fields": [
+          {
+            "type": "input",
+            "inputType": "text",
+            "id": "invoiceNumber",
+            "label": "Invoice #",
+            "required": true,
+            "placeholder": "e.g., INV-1042"
+          },
+          {
+            "type": "input",
+            "inputType": "currency",
+            "id": "amount",
+            "label": "Amount",
+            "required": true,
+            "placeholder": "e.g., 120.50",
+            "validation": {
+              "min": 0.01,
+              "message": "Amount must be greater than 0."
+            }
+          },
+          {
+            "type": "input",
+            "inputType": "select",
+            "id": "paymentMethodId",
+            "label": "Payment method",
+            "required": true,
+            "options": [
+              {
+                "label": "Visa \u2022\u2022\u2022\u2022 4242",
+                "value": "pm_4242"
+              },
+              {
+                "label": "Bank \u2022\u2022\u2022\u2022 1020",
+                "value": "pm_1020"
+              }
+            ]
+          }
+        ],
+        "actions": [
+          {
+            "type": "button",
+            "label": "Preview",
+            "tone": "secondary",
+            "action": {
+              "actionId": "billing.previewPayment",
+              "params": {
+                "invoiceNumber": "{{payForm.invoiceNumber}}",
+                "amount": "{{payForm.amount}}"
+              },
+              "onSuccess": {
+                "type": "toast",
+                "message": "Preview looks good."
+              },
+              "onError": {
+                "type": "toast",
+                "message": "Couldn\u2019t preview payment. Check fields."
+              }
+            }
+          },
+          {
+            "type": "button",
+            "label": "Pay now",
+            "action": {
+              "actionId": "billing.submitPayment",
+              "params": {
+                "invoiceNumber": "{{payForm.invoiceNumber}}",
+                "amount": "{{payForm.amount}}",
+                "paymentMethodId": "{{payForm.paymentMethodId}}"
+              },
+              "onSuccess": {
+                "type": "navigate",
+                "targetSceneId": "billing_success"
+              },
+              "onError": {
+                "type": "toast",
+                "message": "Payment failed. Try another method."
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "chat": {
+    "persistent": true,
+    "suggestedPrompts": [
+      "I can\u2019t find my invoice number",
+      "Use a different payment method"
+    ]
+  }
+}

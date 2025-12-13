@@ -1,0 +1,37 @@
+{
+  "suipVersion": "0.1",
+  "sceneId": "billing_success",
+  "title": "Payment complete",
+  "layout": {
+    "type": "stack",
+    "children": [
+      {
+        "type": "notice",
+        "tone": "success",
+        "message": "Payment successful."
+      },
+      {
+        "type": "text",
+        "content": "A receipt has been sent to your email on file."
+      },
+      {
+        "type": "button",
+        "label": "Back to home",
+        "action": {
+          "actionId": "ui.goHome",
+          "onSuccess": {
+            "type": "navigate",
+            "targetSceneId": "home_shell"
+          }
+        }
+      }
+    ]
+  },
+  "chat": {
+    "persistent": true,
+    "suggestedPrompts": [
+      "Show my payment history",
+      "Download receipt"
+    ]
+  }
+}

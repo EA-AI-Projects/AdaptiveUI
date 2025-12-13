@@ -1,0 +1,102 @@
+{
+  "suipVersion": "0.1",
+  "sceneId": "home_shell",
+  "title": "Welcome",
+  "layout": {
+    "type": "stack",
+    "direction": "vertical",
+    "children": [
+      {
+        "type": "text",
+        "variant": "h2",
+        "content": "How can we help today?"
+      },
+      {
+        "type": "notice",
+        "tone": "info",
+        "message": "Type what you need in chat, or pick a quick option below."
+      },
+      {
+        "type": "grid",
+        "columns": 2,
+        "children": [
+          {
+            "type": "button",
+            "label": "Pay my bill",
+            "action": {
+              "actionId": "billing.previewPayment",
+              "params": {
+                "invoiceNumber": "",
+                "amount": 0.01
+              },
+              "onError": {
+                "type": "toast",
+                "message": "Tell me your invoice number and amount in chat."
+              }
+            }
+          },
+          {
+            "type": "button",
+            "label": "Browse latest products",
+            "action": {
+              "actionId": "catalog.listLatestProducts",
+              "params": {
+                "limit": 10
+              },
+              "onSuccess": {
+                "type": "navigate",
+                "targetSceneId": "catalog_latest"
+              }
+            }
+          },
+          {
+            "type": "button",
+            "label": "Troubleshoot a product",
+            "action": {
+              "actionId": "support.searchKB",
+              "params": {
+                "query": "troubleshoot"
+              },
+              "onSuccess": {
+                "type": "navigate",
+                "targetSceneId": "support_results"
+              }
+            }
+          },
+          {
+            "type": "button",
+            "label": "Create a support case",
+            "action": {
+              "actionId": "support.createCase",
+              "params": {
+                "subject": "Help needed",
+                "description": "User requested support via quick action."
+              },
+              "onSuccess": {
+                "type": "toast",
+                "message": "Case created. A support agent will follow up."
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "chat": {
+    "persistent": true,
+    "suggestedPrompts": [
+      "I need help with my toaster",
+      "Show me your latest products",
+      "I want to pay my bill"
+    ],
+    "placeholder": "Tell me what you want to do\u2026",
+    "allowInterrupt": true
+  },
+  "analytics": {
+    "sceneName": "Home Shell",
+    "tags": [
+      "entry",
+      "intent"
+    ]
+  }
+}
