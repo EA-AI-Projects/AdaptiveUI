@@ -13,9 +13,9 @@ flowchart LR
   %% ===== CLIENT =====
   subgraph Client[Client Device]
     U[User]
-    Shell[AdaptiveUI Shell\n(Persistent Chat + Minimal Shell)]
-    RE[Rendering Engine\n(Web / iOS / Android / Desktop)]
-    UI[Native UI\n(Components + Layout)]
+    Shell["AdaptiveUI Shell<br/>(Persistent Chat + Minimal Shell)"]
+    RE["Rendering Engine<br/>(Web / iOS / Android / Desktop)"]
+    UI["Native UI<br/>(Components + Layout)"]
     U --> Shell
     Shell --> RE
     RE --> UI
@@ -25,15 +25,15 @@ flowchart LR
   %% ===== SERVER =====
   subgraph Server[Backend]
     GW[API Gateway]
-    ORCH[Orchestrator\n(Session + Policy + Prompts)]
-    MAN[UI Manifest Store\n(allowlisted components/actions)]
-    STATE[Session State Store\n(forms/data/flags)]
-    LLM[LLM Provider\n(UI Planner)]
-    ACT[Action Adapters\n(Billing/Support/Catalog)]
+    ORCH["Orchestrator<br/>(Session + Policy + Prompts)"]
+    MAN["UI Manifest Store<br/>(allowlisted components/actions)"]
+    STATE["Session State Store<br/>(forms/data/flags)"]
+    LLM["LLM Provider<br/>(UI Planner)"]
+    ACT["Action Adapters<br/>(Billing/Support/Catalog)"]
   end
 
   %% ===== PROTOCOL BOUNDARY =====
-  SUIP[SUIP Document\n(Structured UI Intent)]
+  SUIP["SUIP Document<br/>(Structured UI Intent)"]
 
   %% ===== FLOWS =====
   Shell -->|chat + events| GW --> ORCH
