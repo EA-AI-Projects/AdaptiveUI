@@ -88,3 +88,98 @@ sequenceDiagram
   Note over User,Renderer: Loop continues: chat or UI events can trigger next SUIP
 ```
 
+## Adaptive UI High-Level Concept
+```mermaid
+flowchart LR
+  U[User] --> C[Persistent Chat + Minimal Shell]
+  C --> O["Orchestrator<br/>(intent + policy + state)"]
+  O --> LLM["LLM<br/>(UI planner)"]
+  LLM --> SUIP["SUIP Document<br/>(structured UI intent)"]
+  SUIP --> R["Rendering Engine<br/>(web / iOS / android)"]
+  R --> UI["Native UI Components"]
+  UI --> U
+
+  UI -->|events| R
+  R -->|action requests| O
+```
+
+## What SUIP is and does (protocol boundary)
+```mermaid
+flowchart TB
+  subgraph "LLM / Planning Side"
+    LLM["LLM produces intent"]
+    M["UI Manifest<br/>(allowed components + actions)"]
+    LLM -->|constrained by| M
+    LLM --> SUIP["SUIP JSON<br/>(versioned schema)"]
+  end
+
+  subgraph "Runtime / Execution Side"
+    V["Schema Validation"]
+    RE["Renderer maps SUIP to native widgets"]
+    AA["Action Adapters<br/>(approved APIs)"]
+    S["Session State<br/>(forms/data/flags)"]
+  end
+
+  SUIP --> V --> RE
+  RE -->|user interactions| AA
+  AA -->|results + outcomes| RE
+  RE <--> S
+```
+
+## AdaptiveUI system architecture (end-to-end)
+```mermaid
+flowchart LR
+  subgraph Client["Client Device"]
+    Shell["AdaptiveUI Shell<br/>(chat + renderer)"]
+    Render["Rendering Engine"]
+    Shell --> Render
+  end
+
+  subgraph Server["Backend"]
+    Gateway["API Gateway"]
+    Orchestrator["Orchestrator Service<br/>(policy + session + prompts)"]
+    Manifest["Manifest Store<br/>(per app)"]
+    State["State Store<br/>(session snapshots)"]
+    Adapters["Action Adapter Layer<br/>(billing/support/catalog)"]
+    LLM["LLM Provider"]
+  end
+
+  Shell -->|chat + events| Gateway --> Orchestrator
+  Orchestrator --> Manifest
+  Orchestrator <--> State
+  Orchestrator --> LLM
+  Orchestrator -->|SUIP| Gateway --> Render
+  Render -->|action request| Gateway --> Orchestrator --> Adapters
+  Adapters --> Orchestrator
+```
+
+## SUIP architecture as a whole (spec + implementations)
+```mermaid
+flowchart TB
+  subgraph Spec["SUIP Specification"]
+    Schema["SUIP JSON Schema"]
+    Semantics["Semantics<br/>(state/binding/actions/nav)"]
+    Examples["Example Scenes"]
+    Schema --> Semantics --> Examples
+  end
+
+  subgraph Manifests["UI Manifests"]
+    ManifestSchema["Manifest Schema"]
+    AppManifest["App Manifest<br/>(allowlist + param schemas)"]
+    ManifestSchema --> AppManifest
+  end
+
+  subgraph Engines["Rendering Engines"]
+    Web[Web Renderer]
+    iOS[iOS Renderer]
+    Android[Android Renderer]
+    Desktop[Desktop Renderer]
+  end
+
+  Spec --> Engines
+  Manifests --> Engines
+  AppManifest -->|constrains| Web
+  AppManifest -->|constrains| iOS
+  AppManifest -->|constrains| Android
+  AppManifest -->|constrains| Desktop
+```
