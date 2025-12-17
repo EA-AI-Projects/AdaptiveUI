@@ -30,7 +30,7 @@ Rendering Engine (Web / iOS / Android / Desktop / Voice)
 Native UI
 ```
 
-## Concept + Architecture (Mermaid)
+## Concept + Architecture
 
 ```mermaid
 flowchart LR
