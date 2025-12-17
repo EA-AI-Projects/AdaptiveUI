@@ -30,6 +30,54 @@ Rendering Engine (Web / iOS / Android / Desktop / Voice)
 Native UI
 ```
 
+## Concept + Architecture (Mermaid)
+
+```mermaid
+flowchart LR
+  %% ===== CLIENT =====
+  subgraph Client[Client Device]
+    U[User]
+    Shell["AdaptiveUI Shell<br/>(Persistent Chat + Minimal Shell)"]
+    RE["Rendering Engine<br/>(Web / iOS / Android / Desktop)"]
+    UI["Native UI<br/>(Components + Layout)"]
+    U --> Shell
+    Shell --> RE
+    RE --> UI
+    UI --> U
+  end
+
+  %% ===== SERVER =====
+  subgraph Server[Backend]
+    GW[API Gateway]
+    ORCH["Orchestrator<br/>(Session + Policy + Prompts)"]
+    MAN["UI Manifest Store<br/>(allowlisted components/actions)"]
+    STATE["Session State Store<br/>(forms/data/flags)"]
+    LLM["LLM Provider<br/>(UI Planner)"]
+    ACT["Action Adapters<br/>(Billing/Support/Catalog)"]
+  end
+
+  %% ===== PROTOCOL BOUNDARY =====
+  SUIP["SUIP Document<br/>(Structured UI Intent)"]
+
+  %% ===== FLOWS =====
+  Shell -->|chat + events| GW --> ORCH
+  ORCH --> MAN
+  ORCH <--> STATE
+  ORCH --> LLM
+  LLM -->|generates| SUIP
+  ORCH -->|returns SUIP| GW --> RE
+
+  RE -->|action request| GW --> ORCH --> ACT
+  ACT -->|result + data| ORCH
+
+  %% ===== ANNOTATIONS =====
+  MAN -. constrains .-> LLM
+  MAN -. constrains .-> ORCH
+  MAN -. constrains .-> RE
+```
+
+---
+
 As long as a platform has a compliant rendering engine, **the same SUIP document can drive the experience everywhere**.
 
 ---
